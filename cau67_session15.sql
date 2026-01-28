@@ -49,3 +49,38 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- sp_delete_friendship xoá quan hệ friendship
+DELIMITER //
+
+CREATE PROCEDURE sp_delete_friendship(
+    IN p_user_id_1 INT,
+    IN p_user_id_2 INT
+)
+BEGIN
+    -- Khai báo Handler để xử lý lỗi
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Nếu có lỗi, thu hồi lại toàn bộ thay đổi
+        ROLLBACK;
+        RESIGNAL SET MESSAGE_TEXT = 'Lỗi: Không thể xóa mối quan hệ. Đã Rollback giao dịch.';
+    END;
+
+    -- Bắt đầu Transaction
+    START TRANSACTION;
+        
+        -- 1. Xóa chiều thuận: A kết bạn với B
+        DELETE FROM friends 
+        WHERE user_id = p_user_id_1 AND friend_id = p_user_id_2;
+        
+        -- 2. Xóa chiều nghịch: B kết bạn với A
+        DELETE FROM friends 
+        WHERE user_id = p_user_id_2 AND friend_id = p_user_id_1;
+
+    -- Nếu cả 2 lệnh trên thành công, xác nhận thay đổi
+    COMMIT;
+    
+    SELECT 'Xóa mối quan hệ bạn bè thành công!' AS result;
+END //
+
+DELIMITER ;
