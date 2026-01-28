@@ -1,7 +1,9 @@
--- 1. Tạo bảng Users
-drop database if exists social_media;
-create database social_media;
-use social_media;
+-- 1. Khởi tạo Database
+DROP DATABASE IF EXISTS social_media;
+CREATE DATABASE social_media;
+USE social_media;
+
+-- 2. Tạo bảng Users
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -10,7 +12,7 @@ CREATE TABLE Users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Tạo bảng Posts
+-- 3. Tạo bảng Posts
 CREATE TABLE Posts (
     post_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -19,7 +21,7 @@ CREATE TABLE Posts (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- 3. Tạo bảng Comments
+-- 4. Tạo bảng Comments
 CREATE TABLE Comments (
     comment_id INT AUTO_INCREMENT PRIMARY KEY,
     post_id INT,
@@ -30,7 +32,7 @@ CREATE TABLE Comments (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- 4. Tạo bảng Friends
+-- 5. Tạo bảng Friends
 CREATE TABLE Friends (
     user_id INT,
     friend_id INT,
@@ -40,7 +42,7 @@ CREATE TABLE Friends (
     FOREIGN KEY (friend_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
--- 5. Tạo bảng Likes
+-- 6. Tạo bảng Likes
 CREATE TABLE Likes (
     user_id INT,
     post_id INT,
@@ -49,10 +51,11 @@ CREATE TABLE Likes (
     FOREIGN KEY (post_id) REFERENCES Posts(post_id) ON DELETE CASCADE
 );
 
+---------------------------------------------------------
+-- INSERT DỮ LIỆU (ĐÃ SỬA LỖI KHÓA NGOẠI)
+---------------------------------------------------------
 
--- insert dữ liệu vào các bảng
-
--- thêm users
+-- Thêm 10 Users (ID từ 1 đến 10)
 INSERT INTO Users (username, password, email, created_at) VALUES 
 ('hoang_long', 'pass123', 'long@example.com', '2026-01-01 08:00:00'),
 ('minh_thu', 'pass123', 'thu@example.com', '2026-01-05 09:30:00'),
@@ -65,50 +68,50 @@ INSERT INTO Users (username, password, email, created_at) VALUES
 ('duc_thinh', 'pass123', 'thinh@example.com', '2026-01-23 20:10:00'),
 ('khanh_huyen', 'pass123', 'huyen@example.com', '2026-01-24 21:00:00');
 
--- thêm posts
+-- Thêm 10 Posts (ID từ 1 đến 10)
 INSERT INTO Posts (user_id, content, created_at) VALUES 
-(5, 'Học SQL thật thú vị!', '2026-01-02 10:00:00'),
-(6, 'Chào buổi sáng cả nhà!', '2026-01-18 07:00:00'),
-(7, 'Review phim mới ra rạp hôm nay.', '2026-01-20 20:00:00'),
-(8, 'Có ai đang code xuyên đêm không?', '2026-01-21 02:00:00'),
-(9, 'Thời tiết Hà Nội hôm nay lạ quá.', '2026-01-22 15:00:00'),
-(10, 'Database là trái tim của ứng dụng.', '2026-01-23 09:00:00'),
-(5, 'Vừa hoàn thành xong mini project!', '2026-01-24 16:00:00'),
-(6, 'Tìm đồng đội học nhóm SQL nâng cao.', '2026-01-25 10:00:00'),
-(7, 'Ai rảnh đi cafe Highland không?', '2026-01-25 14:00:00'),
-(11, 'Chúc mừng năm mới 2026!', '2026-01-01 00:00:01');
+(1, 'Học SQL thật thú vị!', '2026-01-02 10:00:00'),
+(2, 'Chào buổi sáng cả nhà!', '2026-01-18 07:00:00'),
+(3, 'Review phim mới ra rạp hôm nay.', '2026-01-20 20:00:00'),
+(4, 'Có ai đang code xuyên đêm không?', '2026-01-21 02:00:00'),
+(5, 'Thời tiết Hà Nội hôm nay lạ quá.', '2026-01-22 15:00:00'),
+(6, 'Database là trái tim của ứng dụng.', '2026-01-23 09:00:00'),
+(7, 'Vừa hoàn thành xong mini project!', '2026-01-24 16:00:00'),
+(8, 'Tìm đồng đội học nhóm SQL nâng cao.', '2026-01-25 10:00:00'),
+(9, 'Ai rảnh đi cafe Highland không?', '2026-01-25 14:00:00'),
+(10, 'Chúc mừng năm mới 2026!', '2026-01-01 00:00:01');
 
--- thêm comments
+-- Thêm 10 Comments (Sửa user_id 11, 12, 13 về phạm vi 1-10)
 INSERT INTO Comments (post_id, user_id, content) VALUES 
 (4, 6, 'Đúng rồi, mình cũng thấy vậy!'),
 (4, 7, 'Share tài liệu học với bạn ơi.'),
 (5, 8, 'Phim này đoạn kết hơi hụt hẫng.'),
 (6, 9, 'Đang sấp mặt đây bạn ơi...'),
-(7, 10, 'Sáng nắng chiều mưa đúng không?'),
+(7, 1, 'Sáng nắng chiều mưa đúng không?'),
 (8, 5, 'Quá chuẩn luôn thầy ơi!'),
 (9, 6, 'Chúc mừng nhé, giỏi quá.'),
-(10, 7, 'Cho mình đăng ký 1 slot với.'),
-(11, 8, 'Hết bàn rồi bạn ơi, đông lắm.'),
-(4, 10, 'SQL là chân ái!');
+(1, 7, 'Cho mình đăng ký 1 slot với.'),
+(9, 8, 'Hết bàn rồi bạn ơi, đông lắm.'),
+(4, 1, 'SQL là chân ái!');
 
--- thêm likes
+-- Thêm 10 Likes
 INSERT INTO Likes (user_id, post_id) VALUES 
-(5, 4), (6, 4), (7, 4), -- Bài 4 có 3 likes
-(8, 5), (9, 5),          -- Bài 5 có 2 likes
-(10, 6), (5, 6),         -- Bài 6 có 2 likes
-(6, 7),                  -- Bài 7 có 1 like
-(7, 8),                  -- Bài 8 có 1 like
-(8, 9);                  -- Bài 9 có 1 like
+(1, 4), (2, 4), (3, 4), 
+(4, 5), (5, 5), 
+(6, 6), (7, 6), 
+(8, 7), 
+(9, 8), 
+(10, 9);
 
--- thêm friends
+-- Thêm 10 Friends (Chỉ sử dụng user_id từ 1 đến 10)
 INSERT INTO Friends (user_id, friend_id, status) VALUES 
-(5, 6, 'accepted'),
-(5, 7, 'accepted'),
-(6, 8, 'pending'),
-(7, 9, 'accepted'),
-(8, 10, 'accepted'),
-(9, 5, 'pending'),
-(10, 5, 'accepted'),
-(11, 6, 'accepted'),
-(12, 7, 'pending'),
-(13, 8, 'accepted');
+(1, 2, 'accepted'),
+(1, 3, 'accepted'),
+(2, 4, 'pending'),
+(3, 5, 'accepted'),
+(4, 6, 'accepted'),
+(5, 1, 'pending'),
+(6, 7, 'accepted'),
+(7, 8, 'accepted'),
+(8, 9, 'pending'),
+(9, 10, 'accepted');
